@@ -16,6 +16,7 @@ const ProductDetails = () => {
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <div className="flex flex-col md:flex-row">
         <img
+          loading="lazy"
           src={product.image}
           alt={product.title}
           className="w-full md:w-1/2 h-96 object-cover rounded-lg shadow-md"
