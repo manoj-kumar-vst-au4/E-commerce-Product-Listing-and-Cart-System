@@ -19,7 +19,7 @@ Tech Stack
 Setup Instructions
 
 	1.	Clone the repo:
-        git clone https://github.com/yourusername/ecommerce-app.git
+        git clone https://github.com/manoj-kumar-vst-au4/E-commerce-Product-Listing-and-Cart-System.git
         cd ecommerce-app
 
 	2.	Install dependencies:
