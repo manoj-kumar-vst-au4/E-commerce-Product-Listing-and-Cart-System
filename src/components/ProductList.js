@@ -1,32 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchProducts } from '../redux/productSlice';
-import { addToCart } from '../redux/cartSlice';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchProducts } from "../redux/productSlice";
+import { addToCart } from "../redux/cartSlice";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProductList = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products.items);
   const status = useSelector((state) => state.products.status);
-
+const navigate = useNavigate();
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 10;
 
   useEffect(() => {
-    if (status === 'idle') {
+    if (status === "idle") {
       dispatch(fetchProducts());
     }
   }, [status, dispatch]);
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return <div>Loading...</div>;
   }
 
   // Pagination logic
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
   const totalPages = Math.ceil(products.length / productsPerPage);
 
   // Handle pagination buttons
@@ -44,6 +47,15 @@ const ProductList = () => {
 
   return (
     <div className="p-6">
+      <div className="flex justify-end mb-4">
+      <button
+      onClick={()=>navigate('/cart')}
+        className={`px-4 py-2 mx-2  bg-blue-500
+         text-white rounded-lg hover:bg-blue-600 transition-colors`}
+      >
+        Cart
+      </button>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {currentProducts.map((product) => (
           <div
@@ -58,10 +70,16 @@ const ProductList = () => {
               />
             </Link>
             <div className="p-4">
-              <h2 className="text-lg font-semibold text-gray-800 truncate">{product.title}</h2>
-              <p className="text-gray-500 mt-2">{product.description.substring(0, 60)}...</p>
+              <h2 className="text-lg font-semibold text-gray-800 truncate">
+                {product.title}
+              </h2>
+              <p className="text-gray-500 mt-2">
+                {product.description.substring(0, 60)}...
+              </p>
               <div className="flex justify-between items-center mt-4">
-                <span className="text-lg font-bold text-blue-600">${product.price}</span>
+                <span className="text-lg font-bold text-blue-600">
+                  ${product.price}
+                </span>
                 <button
                   onClick={() => dispatch(addToCart(product))}
                   className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
@@ -73,13 +91,14 @@ const ProductList = () => {
           </div>
         ))}
       </div>
-
       {/* Pagination controls */}
       <div className="flex justify-center items-center mt-8">
         <button
           onClick={handlePrevPage}
           disabled={currentPage === 1}
-          className={`px-4 py-2 mx-2 ${currentPage === 1 ? 'bg-gray-300' : 'bg-blue-500'} text-white rounded-lg hover:bg-blue-600 transition-colors`}
+          className={`px-4 py-2 mx-2 ${
+            currentPage === 1 ? "bg-gray-300" : "bg-blue-500"
+          } text-white rounded-lg hover:bg-blue-600 transition-colors`}
         >
           Previous
         </button>
@@ -87,7 +106,9 @@ const ProductList = () => {
         <button
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
-          className={`px-4 py-2 mx-2 ${currentPage === totalPages ? 'bg-gray-300' : 'bg-blue-500'} text-white rounded-lg hover:bg-blue-600 transition-colors`}
+          className={`px-4 py-2 mx-2 ${
+            currentPage === totalPages ? "bg-gray-300" : "bg-blue-500"
+          } text-white rounded-lg hover:bg-blue-600 transition-colors`}
         >
           Next
         </button>
